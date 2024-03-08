@@ -17,7 +17,7 @@ import hxcpp.debug.jsonrpc.eval.Interp;
 import hxcpp.debug.jsonrpc.eval.Expr;
 import hxcpp.debug.jsonrpc.eval.Interp;
 
-@:enum abstract ScopeId(String) to String {
+enum abstract ScopeId(String) to String {
 	var members = "Members";
 	var locals = "Locals";
 }
@@ -264,9 +264,8 @@ class Server {
 
 		socketMutex.acquire();
 		var serialized:String = haxe.Json.stringify(m);
-		var bytes = haxe.io.Bytes.ofString(serialized);
-		socket.output.writeInt32(bytes.length);
-		socket.output.writeBytes(bytes, 0, bytes.length);
+		socket.output.writeInt32(serialized.length);
+		socket.output.writeString(serialized);
 		// trace('sendResponse: ${m.id} ${m.method}');
 		socketMutex.release();
 	}
